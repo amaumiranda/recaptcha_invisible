@@ -1,0 +1,15 @@
+name: reCAPTCHA Invisible
+type: module
+description: 'Protects your webforms with reCAPTCHA v2 Invisible.'
+package: Security
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+configure: recaptcha_invisible.settings
+dependencies:
+  - drupal:webform
+
+# Module information
+version: 1.0
+author: Amauri Miranda dos Santos Junior
+homepage: https://amaurimrianda.com.br
+author_github: https://github.com/amaumiranda

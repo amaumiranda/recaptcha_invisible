@@ -1,0 +1,7 @@
+recaptcha_invisible.settings:
+  path: '/admin/config/services/recaptcha-invisible'
+  defaults:
+    _form: '\Drupal\recaptcha_invisible\Form\RecaptchaInvisibleSettingsForm'
+    _title: 'reCAPTCHA Invisible Settings'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,6 @@
+recaptcha_invisible.settings:
+  title: 'reCAPTCHA Invisible'
+  description: 'Configure reCAPTCHA Invisible settings'
+  parent: system.admin_config_services
+  route_name: recaptcha_invisible.settings
+  weight: 0

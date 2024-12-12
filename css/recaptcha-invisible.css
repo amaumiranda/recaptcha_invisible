@@ -1,0 +1,4 @@
+.grecaptcha-badge {
+    visibility: visible !important;
+    z-index: 999999;
+}

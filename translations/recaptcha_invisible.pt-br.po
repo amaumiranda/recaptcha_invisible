@@ -1,0 +1,104 @@
+# Portuguese, Brazil translation of reCAPTCHA Invisible
+# Copyright (c) 2024
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: reCAPTCHA Invisible 1.0\n"
+"POT-Creation-Date: 2024-12-12 22:40-0300\n"
+"PO-Revision-Date: 2024-12-12 22:40-0300\n"
+"Language-Team: Portuguese, Brazil\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: pt-br\n"
+
+# Module name and description
+msgid "reCAPTCHA Invisible"
+msgstr "reCAPTCHA Invisível"
+
+msgid "Protects your webforms with reCAPTCHA v2 Invisible."
+msgstr "Protege seus webforms com reCAPTCHA v2 Invisível."
+
+# Settings form
+msgid "reCAPTCHA Invisible Settings"
+msgstr "Configurações do reCAPTCHA Invisível"
+
+msgid "Site Key"
+msgstr "Chave do Site"
+
+msgid "The site key provided by Google reCAPTCHA."
+msgstr "A chave do site fornecida pelo Google reCAPTCHA."
+
+msgid "Secret Key"
+msgstr "Chave Secreta"
+
+msgid "The secret key provided by Google reCAPTCHA."
+msgstr "A chave secreta fornecida pelo Google reCAPTCHA."
+
+msgid "Form IDs"
+msgstr "IDs dos Formulários"
+
+msgid "Enter one form ID per line. Leave empty to protect all webform submission forms."
+msgstr "Digite um ID de formulário por linha. Deixe vazio para proteger todos os formulários de submissão webform."
+
+msgid "Development Mode"
+msgstr "Modo de Desenvolvimento"
+
+msgid "Enable development mode to bypass reCAPTCHA validation."
+msgstr "Ative o modo de desenvolvimento para ignorar a validação do reCAPTCHA."
+
+msgid "Show Badge"
+msgstr "Mostrar Selo"
+
+msgid "Show the reCAPTCHA badge on the page."
+msgstr "Mostrar o selo do reCAPTCHA na página."
+
+# Error messages
+msgid "reCAPTCHA verification failed. Please try again."
+msgstr "Falha na verificação do reCAPTCHA. Por favor, tente novamente."
+
+msgid "Please complete the reCAPTCHA verification."
+msgstr "Por favor, complete a verificação do reCAPTCHA."
+
+msgid "Error verifying reCAPTCHA. Please try again later."
+msgstr "Erro ao verificar o reCAPTCHA. Por favor, tente novamente mais tarde."
+
+msgid "Error initializing reCAPTCHA. Please check the site key."
+msgstr "Erro ao inicializar o reCAPTCHA. Por favor, verifique a chave do site."
+
+msgid "Missing reCAPTCHA configuration. Please configure the reCAPTCHA keys."
+msgstr "Configuração do reCAPTCHA ausente. Por favor, configure as chaves do reCAPTCHA."
+
+msgid "Error initializing reCAPTCHA. Please check the site key and refresh the page."
+msgstr "Erro ao inicializar o reCAPTCHA. Por favor, verifique a chave do site e atualize a página."
+
+msgid "Error executing reCAPTCHA. Please refresh the page and try again."
+msgstr "Erro ao executar o reCAPTCHA. Por favor, atualize a página e tente novamente."
+
+# Menu and tabs
+msgid "Security"
+msgstr "Segurança"
+
+msgid "Configure reCAPTCHA Invisible settings"
+msgstr "Configurar as configurações do reCAPTCHA Invisível"
+
+msgid "Settings"
+msgstr "Configurações"
+
+# JavaScript messages
+msgid "Invalid or missing reCAPTCHA site key"
+msgstr "Chave do site reCAPTCHA inválida ou ausente"
+
+msgid "No webform submission forms found"
+msgstr "Nenhum formulário de submissão webform encontrado"
+
+msgid "reCAPTCHA container not found in form"
+msgstr "Container do reCAPTCHA não encontrado no formulário"
+
+# Log messages
+msgid "reCAPTCHA verification failed: @result"
+msgstr "Verificação do reCAPTCHA falhou: @result"
+
+msgid "reCAPTCHA verification error: @error"
+msgstr "Erro na verificação do reCAPTCHA: @error"

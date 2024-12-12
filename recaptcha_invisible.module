@@ -1,0 +1,140 @@
+<?php
+
+/**
+ * @file
+ * Protects webforms with reCAPTCHA v2 Invisible.
+ *
+ * @author Amauri Miranda dos Santos Junior
+ * @link https://amaurimrianda.com.br
+ * @link https://github.com/amaumiranda
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use GuzzleHttp\Exception\RequestException;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function recaptcha_invisible_page_attachments(array &$attachments) {
+  $config = \Drupal::config('recaptcha_invisible.settings');
+  $site_key = $config->get('site_key');
+  $dev_mode = $config->get('dev_mode');
+  $show_badge = $config->get('show_badge') !== NULL ? $config->get('show_badge') : TRUE;
+  $form_ids = $config->get('form_ids');
+  $form_ids = !empty($form_ids) ? array_filter(explode("\n", $form_ids)) : array();
+  
+  if (!empty($site_key)) {
+    $attachments['#attached']['library'][] = 'recaptcha_invisible/recaptcha';
+    $attachments['#attached']['drupalSettings']['recaptchaInvisible'] = [
+      'siteKey' => $site_key,
+      'devMode' => (bool) $dev_mode,
+      'showBadge' => (bool) $show_badge,
+      'formIds' => array_map('trim', $form_ids),
+    ];
+
+    // Add CSS to hide badge if needed
+    if (!$show_badge) {
+      $attachments['#attached']['html_head'][] = [
+        [
+          '#type' => 'html_tag',
+          '#tag' => 'style',
+          '#value' => '.grecaptcha-badge { visibility: hidden !important; opacity: 0 !important; position: fixed !important; bottom: -9999px !important; display: none !important; }',
+        ],
+        'recaptcha_invisible_hide_badge'
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function recaptcha_invisible_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $config = \Drupal::config('recaptcha_invisible.settings');
+  $site_key = $config->get('site_key');
+  $dev_mode = $config->get('dev_mode');
+  
+  // Check if this is a webform submission form
+  if (strpos($form_id, 'webform_submission_') !== 0) {
+    return;
+  }
+
+  if (!$dev_mode && !empty($site_key)) {
+    // Add div for reCAPTCHA before the submit button
+    $form['actions']['submit']['#prefix'] = '<div class="g-recaptcha" data-sitekey="' . $site_key . '"></div>';
+    
+    // Add validation
+    array_unshift($form['#validate'], 'recaptcha_invisible_validate');
+
+    // Add a hidden input for the reCAPTCHA response if it doesn't exist
+    if (!isset($form['g-recaptcha-response'])) {
+      $form['g-recaptcha-response'] = [
+        '#type' => 'hidden',
+        '#default_value' => '',
+        '#attributes' => ['class' => ['recaptcha-response']],
+      ];
+    }
+
+    // Prevent form from submitting if reCAPTCHA is not initialized
+    $form['#attributes']['class'][] = 'recaptcha-protected-form';
+  }
+
+  // Ensure the library is attached to this form
+  $form['#attached']['library'][] = 'recaptcha_invisible/recaptcha';
+}
+
+/**
+ * Custom validation for reCAPTCHA.
+ */
+function recaptcha_invisible_validate($form, FormStateInterface $form_state) {
+  $config = \Drupal::config('recaptcha_invisible.settings');
+  
+  // Skip validation in dev mode
+  if ($config->get('dev_mode')) {
+    return;
+  }
+
+  // Get the reCAPTCHA response
+  $recaptcha_response = $form_state->getValue('g-recaptcha-response');
+  $secret_key = $config->get('secret_key');
+
+  // Skip validation if we're just starting (first AJAX call)
+  $is_ajax = \Drupal::request()->isXmlHttpRequest();
+  $triggering_element = $form_state->getTriggeringElement();
+  $is_initial_submit = $is_ajax && $triggering_element && $triggering_element['#type'] === 'submit';
+
+  if ($is_initial_submit) {
+    return;
+  }
+
+  // Only validate if we have a secret key
+  if (!empty($secret_key)) {
+    // If no response and it's not the initial submit, show error
+    if (empty($recaptcha_response)) {
+      $form_state->setErrorByName('g-recaptcha-response', t('Please complete the reCAPTCHA verification.'));
+      return;
+    }
+
+    // Verify the token
+    try {
+      $client = \Drupal::httpClient();
+      $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+        'form_params' => [
+          'secret' => $secret_key,
+          'response' => $recaptcha_response,
+        ],
+        'timeout' => 15,
+      ]);
+      
+      $result = json_decode((string) $response->getBody(), TRUE);
+      
+      if (!isset($result['success']) || $result['success'] !== TRUE) {
+        $form_state->setErrorByName('g-recaptcha-response', t('reCAPTCHA verification failed. Please try again.'));
+        \Drupal::logger('recaptcha_invisible')->notice('reCAPTCHA verification failed: @result', ['@result' => print_r($result, TRUE)]);
+      }
+    } catch (RequestException $e) {
+      \Drupal::logger('recaptcha_invisible')->error('reCAPTCHA verification error: @error', ['@error' => $e->getMessage()]);
+      $form_state->setErrorByName('g-recaptcha-response', t('Error verifying reCAPTCHA. Please try again later.'));
+    }
+  }
+}

@@ -1,0 +1,13 @@
+recaptcha:
+  version: VERSION
+  js:
+    https://www.google.com/recaptcha/api.js?render=explicit: { type: external, minified: true, attributes: { async: true, defer: true } }
+    js/recaptcha-invisible.js: {}
+  css:
+    theme:
+      css/recaptcha-invisible.css: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings

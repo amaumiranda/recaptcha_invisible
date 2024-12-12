@@ -1,0 +1,4 @@
+recaptcha_invisible.settings:
+  title: 'reCAPTCHA Invisible'
+  route_name: recaptcha_invisible.settings
+  base_route: recaptcha_invisible.settings
